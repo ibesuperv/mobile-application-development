@@ -25,39 +25,39 @@ MOBILE APPLICATION DEVELOPMENT
 
 ### 📁 [UNIT-1: Foundations & Core Architecture](UNIT-1/README.md)
 - **Core Topics**: Smartphone OS fundamentals, DVM vs. ART, Project structure, Layout Managers, Resources (`dp` vs `sp`), Activities, Intents (Explicit vs Implicit), 7 Lifecycle callbacks, Debugger & Support Libraries (AndroidX).
-- **Exam Solutions**:
-  - [09_Question_Paper_Solutions_Unit1.md](UNIT-1/09_Question_Paper_Solutions_Unit1.md): ART vs DVM, AVD architecture, Linux Kernel, Native Libraries, Application Framework & SQLite integration.
-  - [10_Question_Paper_Solutions_Unit1_Part2.md](UNIT-1/10_Question_Paper_Solutions_Unit1_Part2.md): Open Handset Alliance (OHA), Complete Name/USN App code, Views/Groups/Gradle/SDK definitions, JVM vs DVM matrix.
-  - [11_Question_Paper_Solutions_Part4.md](UNIT-1/11_Question_Paper_Solutions_Part4.md): APK structure & 7 components, ADB, 5-layer software stack, Android vs iOS comparison, `/res` directory breakdown.
-  - [12_Short_Answer_Question_Bank_Solutions.md](UNIT-1/12_Short_Answer_Question_Bank_Solutions.md): 54 quick-fire 2-mark viva and quiz solutions.
+- **Exam Solutions (Stored in `UNIT-1/QP/`)**:
+  - [QP/09_Question_Paper_Solutions_Unit1.md](UNIT-1/QP/09_Question_Paper_Solutions_Unit1.md): ART vs DVM, AVD architecture, Linux Kernel, Native Libraries, Application Framework & SQLite integration.
+  - [QP/10_Question_Paper_Solutions_Unit1_Part2.md](UNIT-1/QP/10_Question_Paper_Solutions_Unit1_Part2.md): Open Handset Alliance (OHA), Complete Name/USN App code, Views/Groups/Gradle/SDK definitions, JVM vs DVM matrix.
+  - [QP/11_Question_Paper_Solutions_Part4.md](UNIT-1/QP/11_Question_Paper_Solutions_Part4.md): APK structure & 7 components, ADB, 5-layer software stack, Android vs iOS comparison, `/res` directory breakdown.
+  - [QP/12_Short_Answer_Question_Bank_Solutions.md](UNIT-1/QP/12_Short_Answer_Question_Bank_Solutions.md): 54 quick-fire 2-mark viva and quiz solutions.
 
 ---
 
 ### 📁 [UNIT-2: User Experience, Material Design & Testing](UNIT-2/README.md)
 - **Core Topics**: User Input Controls, Dialogs (`AlertDialog.Builder`), Pickers, Gestures, Menus (Options, Context, CAB, Popup), Navigation (Back vs Up, DrawerLayout, TabLayout), `RecyclerView`, Drawables, Styles & Themes, Material Design, UI Testing (Espresso vs UI Automator).
-- **Exam Solutions**:
-  - [08_Question_Paper_Solutions_Unit2.md](UNIT-2/08_Question_Paper_Solutions_Unit2.md): Attributes & Java code for Content Providers, Intents, Services, and Broadcast Receivers.
-  - [09_Question_Paper_Solutions_Unit2_Layouts.md](UNIT-2/09_Question_Paper_Solutions_Unit2_Layouts.md): Functions & attributes for 8 Layout Managers (LinearLayout, TableLayout, GridLayout, ListView, AbsoluteLayout, RelativeLayout, ConstraintLayout, TabLayout).
-  - [10_Question_Paper_Solutions_Paper5_Complete.md](UNIT-2/10_Question_Paper_Solutions_Paper5_Complete.md): Handling click events (2 techniques), Service lifecycle, SQLite query code, 6 Storage options, Fragments & Room Database annotations.
+- **Exam Solutions (Stored in `UNIT-2/QP/`)**:
+  - [QP/08_Question_Paper_Solutions_Unit2.md](UNIT-2/QP/08_Question_Paper_Solutions_Unit2.md): Attributes & Java code for Content Providers, Intents, Services, and Broadcast Receivers.
+  - [QP/09_Question_Paper_Solutions_Unit2_Layouts.md](UNIT-2/QP/09_Question_Paper_Solutions_Unit2_Layouts.md): Functions & attributes for 8 Layout Managers (LinearLayout, TableLayout, GridLayout, ListView, AbsoluteLayout, RelativeLayout, ConstraintLayout, TabLayout).
+  - [QP/10_Question_Paper_Solutions_Paper5_Complete.md](UNIT-2/QP/10_Question_Paper_Solutions_Paper5_Complete.md): Handling click events (2 techniques), Service lifecycle, SQLite query code, 6 Storage options, Fragments & Room Database annotations.
 
 ---
 
 ### 📁 [UNIT-3: Background Processing, Services & Broadcasts](UNIT-3/README.md)
 - **Core Topics**: `AsyncTask` & `AsyncTaskLoader`, `HttpURLConnection`, JSON parsing, `ConnectivityManager`, Broadcast Receivers (Static vs Dynamic), Services (Foreground, Started, Bound), `JobScheduler`, AlarmManager, Wireless Radio State Machine (Tail Time & Data Bundling).
-- **Exam Solutions**:
+- **Exam Solutions (Stored in `UNIT-3/QP/` & `UNIT-3/`)**:
   - [04_Question_Paper_Solutions_Unit3.md](UNIT-3/04_Question_Paper_Solutions_Unit3.md): Email sending intent code, CountDownTimer complete app code, Activity parameter passing code.
-  - [05_Question_Paper_Solutions_Units3_4_5.md](UNIT-3/05_Question_Paper_Solutions_Units3_4_5.md): AsyncTask generics, Notification app code, Loaders, Data Transfer, SharedPreferences, Location Services, Alarms, SQLiteOpenHelper callbacks, Permissions, App Publishing steps.
-  - [06_Question_Paper_Solutions_Unit3_Background_PartA.md](UNIT-3/06_Question_Paper_Solutions_Unit3_Background_PartA.md): AsyncTask definition, LoaderManager, Broadcast types, Intent Filters, SharedPreferences vs SavedInstanceState.
-  - [07_Question_Paper_Solutions_Unit3_Background_PartB.md](UNIT-3/07_Question_Paper_Solutions_Unit3_Background_PartB.md): App Publishing steps, AsyncTaskLoader block diagram & code, Permission types, BroadcastReceiver implementation, 6 App Security practices.
-  - [08_Question_Paper_Solutions_Unit3_Broadcasts_Paper.md](UNIT-3/08_Question_Paper_Solutions_Unit3_Broadcasts_Paper.md): Power Connection Broadcast Receiver code, Service lifecycle diagrams, Firebase & AdMob overview.
+  - [QP/05_Question_Paper_Solutions_Units3_4_5.md](UNIT-3/QP/05_Question_Paper_Solutions_Units3_4_5.md): AsyncTask generics, Notification app code, Loaders, Data Transfer, SharedPreferences, Location Services, Alarms, SQLiteOpenHelper callbacks, Permissions, App Publishing steps.
+  - [QP/06_Question_Paper_Solutions_Unit3_Background_PartA.md](UNIT-3/QP/06_Question_Paper_Solutions_Unit3_Background_PartA.md): AsyncTask definition, LoaderManager, Broadcast types, Intent Filters, SharedPreferences vs SavedInstanceState.
+  - [QP/07_Question_Paper_Solutions_Unit3_Background_PartB.md](UNIT-3/QP/07_Question_Paper_Solutions_Unit3_Background_PartB.md): App Publishing steps, AsyncTaskLoader block diagram & code, Permission types, BroadcastReceiver implementation, 6 App Security practices.
+  - [QP/08_Question_Paper_Solutions_Unit3_Broadcasts_Paper.md](UNIT-3/QP/08_Question_Paper_Solutions_Unit3_Broadcasts_Paper.md): Power Connection Broadcast Receiver code, Service lifecycle diagrams, Firebase & AdMob overview.
 
 ---
 
 ### 📁 [UNIT-4: Data Storage, Location, Maps & Advanced APIs](UNIT-4/README.md)
 - **Core Topics**: 6 Storage options matrix, Internal vs External storage, `SQLiteOpenHelper`, `SQLiteDatabase` CRUD, `ContentProvider` URIs, `WebView`, `MediaPlayer` state machine, Location Services (`FusedLocationProviderClient`), Google Maps API (5 Map types), `SmsManager`, Email Intents, Sensor framework (`SensorManager`, `Sensor`, `SensorEvent`).
-- **Exam Solutions**:
-  - [06_Question_Paper_Solutions_Unit4_Location_Maps.md](UNIT-4/06_Question_Paper_Solutions_Unit4_Location_Maps.md): Location permissions code, Periodic updates code, Geocoder, Maps 5 types & config code, Performance optimization.
-  - [07_Question_Paper_Solutions_Unit4_Graphics_Security.md](UNIT-4/07_Question_Paper_Solutions_Unit4_Graphics_Security.md): Canvas 5 drawing methods, Internet & Web Pages, Permissions, App Security practices, Firebase Realtime DB code, 4 Animation components, SMS sending code, TrafficStats network monitoring.
+- **Exam Solutions (Stored in `UNIT-4/QP/`)**:
+  - [QP/06_Question_Paper_Solutions_Unit4_Location_Maps.md](UNIT-4/QP/06_Question_Paper_Solutions_Unit4_Location_Maps.md): Location permissions code, Periodic updates code, Geocoder, Maps 5 types & config code, Performance optimization.
+  - [QP/07_Question_Paper_Solutions_Unit4_Graphics_Security.md](UNIT-4/QP/07_Question_Paper_Solutions_Unit4_Graphics_Security.md): Canvas 5 drawing methods, Internet & Web Pages, Permissions, App Security practices, Firebase Realtime DB code, 4 Animation components, SMS sending code, TrafficStats network monitoring.
 
 ---
 
