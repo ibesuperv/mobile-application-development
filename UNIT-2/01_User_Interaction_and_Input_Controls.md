@@ -9,6 +9,7 @@
 **Input Controls** are the interactive visual UI components (built on `android.view.View`) that capture user input and trigger application responses.
 
 ### Material Design Guidance:
+
 Android UI components conform to Google's **Material Design Specification**. Controls should be intuitive, consistent across apps, and minimize user effort (pre-filling data, minimizing touch gestures, providing clear visual state feedback).
 
 ---
@@ -19,20 +20,22 @@ Android uses **Focus** to determine which specific `View` in the window hierarch
 
 ### Focus vs. Clickable (Exam 4-Mark Distinction):
 
-| Property | Definition | Key Difference |
-| :--- | :--- | :--- |
-| **`clickable`** (`android:clickable`) | Indicates whether a View can respond to click or tap events (`OnClickListener`). | Touch targets like `Button` are clickable by default. |
+| Property                              | Definition                                                                                               | Key Difference                                                           |
+| :------------------------------------ | :------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------- |
+| **`clickable`** (`android:clickable`) | Indicates whether a View can respond to click or tap events (`OnClickListener`).                         | Touch targets like `Button` are clickable by default.                    |
 | **`focusable`** (`android:focusable`) | Indicates whether a View is allowed to gain input focus from input devices (keyboard, trackball, D-pad). | Keyboards send key events **only** to the View that currently has focus. |
 
 ---
 
 ### Touch Mode Behavior:
+
 - **Smartphones / Tablets (Touch Devices)**: Enter "Touch Mode" when touched. In Touch Mode, only Views with `isFocusableInTouchMode="true"` (like `EditText`) take focus when touched. Buttons or Checkboxes react to clicks immediately without taking input focus.
 - **TV / Non-Touch Devices (D-Pad Navigation)**: Navigated via trackball or D-pad direction keys. Every focusable element gains a visible focus ring as navigation moves from element to element.
 
 ---
 
 ### Customizing Focus Order in XML Layouts:
+
 By default, focus moves left-to-right, top-to-bottom. You can explicitly override focus navigation using directional focus attributes:
 
 ```xml
@@ -99,6 +102,7 @@ Buttons perform an action when clicked. They have 3 visual states: **Normal**, *
 `EditText` extends `TextView`, enabling user text editing.
 
 #### Key XML Attributes for Keyboard & Focus Tuning:
+
 - **`android:inputType`**: Dictates soft keyboard layout (`textPersonName`, `textPassword`, `number`, `phone`, `textEmailAddress`, `textCapSentences`).
 - **`android:imeOptions`**: Customizes the bottom-right Action Key on the soft keyboard (`actionNext`, `actionDone`, `actionSearch`, `actionSend`).
 - **`android:hint`**: Displays placeholder text when the field is empty.
@@ -120,6 +124,7 @@ Buttons perform an action when clicked. They have 3 visual states: **Normal**, *
 Allows users to select one or more options from a set. Can be toggled on (checked) or off (unchecked).
 
 #### XML Layout:
+
 ```xml
 <CheckBox
     android:id="@+id/checkbox_chocolate"
@@ -129,6 +134,7 @@ Allows users to select one or more options from a set. Can be toggled on (checke
 ```
 
 #### Java Event Handler:
+
 ```xml
 <CheckBox
     android:id="@+id/checkbox_sprinkles"
@@ -139,19 +145,17 @@ Allows users to select one or more options from a set. Can be toggled on (checke
 ```
 
 ```java
-public void onCheckboxClicked(View view) {
-    // Check if the checkbox is checked
-    boolean checked = ((CheckBox) view).isChecked();
+public void onCheckboxClicked(View view){
 
-    switch (view.getId()) {
-        case R.id.checkbox_sprinkles:
-            if (checked) {
-                // Add sprinkles
-            } else {
-                // Remove sprinkles
-            }
-            break;
+    CheckBox cb = (CheckBox) view;
+
+    if(cb.isChecked()){
+        Toast.makeText(this,"Checked",Toast.LENGTH_SHORT).show();
     }
+    else{
+        Toast.makeText(this,"Unchecked",Toast.LENGTH_SHORT).show();
+    }
+
 }
 ```
 
@@ -162,6 +166,7 @@ public void onCheckboxClicked(View view) {
 Radio buttons allow selecting **EXACTLY ONE** option from a mutually exclusive set. They **must be grouped** inside a `<RadioGroup>`.
 
 #### XML Layout:
+
 ```xml
 <RadioGroup
     android:id="@+id/radio_group_delivery"
@@ -186,22 +191,20 @@ Radio buttons allow selecting **EXACTLY ONE** option from a mutually exclusive s
 ```
 
 #### Java Event Handler:
-```java
-public void onRadioButtonClicked(View view) {
-    boolean checked = ((RadioButton) view).isChecked();
 
-    switch (view.getId()) {
-        case R.id.radio_sameday:
-            if (checked) {
-                // Same day delivery selected
-            }
-            break;
-        case R.id.radio_nextday:
-            if (checked) {
-                // Next day delivery selected
-            }
-            break;
+```java
+public void onCheckboxClicked(View view){
+
+    CheckBox cb = (CheckBox) view;
+
+    if(cb.isChecked()){
+        Toast.makeText(this,"Checked",Toast.LENGTH_SHORT).show();
     }
+    else{
+        Toast.makeText(this,"Unchecked",Toast.LENGTH_SHORT).show();
+    }
+
+}
 }
 ```
 
@@ -210,6 +213,7 @@ public void onRadioButtonClicked(View view) {
 ### E. Toggle Buttons (`ToggleButton` & `Switch`)
 
 Displays an on/off state switch.
+
 - `ToggleButton`: Traditional push button showing text ("ON"/"OFF").
 - `Switch`: Modern slider widget representing ON/OFF state (commonly used in settings screens).
 
@@ -228,6 +232,7 @@ Displays an on/off state switch.
 A `Spinner` provides a drop-down menu for selecting one value from a list of options.
 
 #### 1. Define Options Array (`res/values/strings.xml`):
+
 ```xml
 <string-array name="labels_array">
     <item>Home</item>
@@ -238,6 +243,7 @@ A `Spinner` provides a drop-down menu for selecting one value from a list of opt
 ```
 
 #### 2. Add Spinner to XML Layout:
+
 ```xml
 <Spinner
     android:id="@+id/label_spinner"
@@ -246,6 +252,7 @@ A `Spinner` provides a drop-down menu for selecting one value from a list of opt
 ```
 
 #### 3. Bind Data via `ArrayAdapter` & Handle Selection in Java:
+
 ```java
 Spinner spinner = (Spinner) findViewById(R.id.label_spinner);
 

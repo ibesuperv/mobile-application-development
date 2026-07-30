@@ -7,7 +7,9 @@
 Unlike an **Explicit Intent** (which specifies the target component by its exact Java class name), an **Implicit Intent** declares a general action to perform without naming a specific target activity or application component.
 
 ### How Implicit Intents Work:
+
 When an app sends an implicit intent, the Android operating system checks all installed applications on the device, comparing the requested action against **Intent Filters** declared in their `AndroidManifest.xml` files.
+
 - **Single Match**: If only one app component matches, Android launches it immediately.
 - **Multiple Matches**: If multiple apps can handle the request (e.g., multiple web browsers or photo viewers), Android presents an **App Chooser Dialog** allowing the user to select their preferred app.
 - **Zero Matches**: If no app matches the request, calling `startActivity()` causes an unhandled `ActivityNotFoundException` and crashes the app.
@@ -45,6 +47,7 @@ Implicit intents rely on three main fields to describe the requested operation:
 To prevent runtime crashes (`ActivityNotFoundException`), developers **must verify** that a matching activity exists on the device before executing `startActivity()`.
 
 ### Crucial Safety Check Pattern: `resolveActivity()`
+
 Use `resolveActivity(getPackageManager())` to query the system Package Manager.
 
 ```java
@@ -67,17 +70,18 @@ if (mapIntent.resolveActivity(getPackageManager()) != null) {
 When users perform actions like **Sharing**, they may want to use a different app each time rather than setting a permanent default. `Intent.createChooser()` forces the Android App Chooser dialog to display every time.
 
 ```java
-Intent sendIntent = new Intent(Intent.ACTION_SEND);
-sendIntent.putExtra(Intent.EXTRA_TEXT, "Check out this Android study guide!");
-sendIntent.setType("text/plain");
+public void shareNotes(View view) {
 
-// Create chooser wrapper intent with a custom dialog title
-String chooserTitle = getResources().getString(R.string.chooser_title);
-Intent chooserIntent = Intent.createChooser(sendIntent, chooserTitle);
+    Intent intent = new Intent(Intent.ACTION_SEND);
 
-// Verify and launch chooser
-if (sendIntent.resolveActivity(getPackageManager()) != null) {
-    startActivity(chooserIntent);
+    intent.putExtra(Intent.EXTRA_TEXT, "Android is awesome!");
+
+    intent.setType("text/plain");
+
+    Intent chooser = Intent.createChooser(intent, "Share using");
+
+    startActivity(chooser);
+
 }
 ```
 
@@ -88,9 +92,11 @@ if (sendIntent.resolveActivity(getPackageManager()) != null) {
 To allow external apps to launch an activity in your application, you must declare one or more `<intent-filter>` elements inside your `AndroidManifest.xml`.
 
 ### Three Intent Filter Matching Rules (Exam 6-Mark Question):
+
 An incoming implicit intent must pass **all three tests** to be delivered to the target activity:
+
 1. **Action Test**: The intent action must match at least one `<action>` defined in the filter.
-2. **Category Test**: Every category declared in the incoming `Intent` object must match a `<category>` tag in the filter. *(Note: All activities handling implicit intents MUST declare `android.intent.category.DEFAULT`)*.
+2. **Category Test**: Every category declared in the incoming `Intent` object must match a `<category>` tag in the filter. _(Note: All activities handling implicit intents MUST declare `android.intent.category.DEFAULT`)_.
 3. **Data Test**: The URI scheme and MIME type must match the filter's `<data>` tag.
 
 ### Sample Manifest Declaration (`AndroidManifest.xml`)
@@ -133,12 +139,12 @@ Specified via `android:launchMode` attribute in `AndroidManifest.xml` or via **I
 
 ### The 4 Activity Launch Modes:
 
-| Launch Mode | Back Stack & Instantiation Behavior | Use Case |
-| :--- | :--- | :--- |
-| **`standard`** *(Default)* | Always creates a new instance of the Activity on top of the current task's back stack. Multiple instances can exist in the same task. | Standard screens (e.g., news article detail view). |
-| **`singleTop`** | If an instance of the activity **already exists at the top of the current back stack**, the intent is routed to it via `onNewIntent()` instead of creating a new instance. | Search results screen, notification targets. |
-| **`singleTask`** | System creates a new task root for the activity. If an instance already exists in another task, the system brings that task to the foreground and routes the intent via `onNewIntent()`. | Main Home/Dashboard Activity. |
-| **`singleInstance`** | Same as `singleTask`, but the system permits **NO OTHER activities** inside the task. The activity is the sole, isolated member of its task. | Device Dialer, Alarm Clock app. |
+| Launch Mode                | Back Stack & Instantiation Behavior                                                                                                                                                      | Use Case                                           |
+| :------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------- |
+| **`standard`** _(Default)_ | Always creates a new instance of the Activity on top of the current task's back stack. Multiple instances can exist in the same task.                                                    | Standard screens (e.g., news article detail view). |
+| **`singleTop`**            | If an instance of the activity **already exists at the top of the current back stack**, the intent is routed to it via `onNewIntent()` instead of creating a new instance.               | Search results screen, notification targets.       |
+| **`singleTask`**           | System creates a new task root for the activity. If an instance already exists in another task, the system brings that task to the foreground and routes the intent via `onNewIntent()`. | Main Home/Dashboard Activity.                      |
+| **`singleInstance`**       | Same as `singleTask`, but the system permits **NO OTHER activities** inside the task. The activity is the sole, isolated member of its task.                                             | Device Dialer, Alarm Clock app.                    |
 
 ```xml
 <activity
@@ -166,10 +172,10 @@ When `singleTop` or `singleTask` routes a new intent to an existing activity ins
 @Override
 protected void onNewIntent(Intent intent) {
     super.onNewIntent(intent);
-    
+
     // Replace original intent returned by getIntent() with the new intent
     setIntent(intent);
-    
+
     // Process new intent data
     handleIncomingData(intent);
 }

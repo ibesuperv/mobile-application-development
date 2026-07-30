@@ -7,6 +7,7 @@
 `EditText` is the primary interactive view for receiving user text entry.
 
 ### A. Key Customization XML Attributes (Exam 6-Mark Question)
+
 - **`android:inputType`**: Dictates the soft keyboard layout and input behavior:
   - `textPersonName` / `textCapSentences`: Capitalizes sentences automatically.
   - `textEmailAddress`: Shows an email-optimized soft keyboard with `@` and `.com` keys.
@@ -26,17 +27,17 @@
 ### B. Customizing Keyboard Action Key Programmatically (`setOnEditorActionListener`)
 
 ```java
-EditText phoneEditText = (EditText) findViewById(R.id.phone_number);
+EditText editText = (EditText)findViewById(R.id.editText);
 
-phoneEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
     @Override
-    public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-        boolean handled = false;
-        if (actionId == EditorInfo.IME_ACTION_SEND) {
-            dialNumber();
-            handled = true;
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if(actionId == EditorInfo.IME_ACTION_DONE){
+            Toast.makeText(getApplicationContext(), "Done Pressed", Toast.LENGTH_SHORT).show();
+            return true;
         }
-        return handled;
+        return false;
     }
 });
 ```
@@ -70,29 +71,24 @@ A **Dialog** is a small modal window that appears on top of the current Activity
 `AlertDialog.Builder` implements the **Builder Design Pattern** to configure and instantiate complex dialog objects cleanly.
 
 ```java
-public void onClickShowAlert(View view) {
-    AlertDialog.Builder myAlertBuilder = new AlertDialog.Builder(MainActivity.this);
-    
-    // Set Title and Message
-    myAlertBuilder.setTitle(R.string.alert_title);
-    myAlertBuilder.setMessage(R.string.alert_message);
+public void showAlert(View view){
 
-    // Set Positive Button (e.g. OK)
-    myAlertBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+    builder.setTitle("Alert");
+
+    builder.setMessage("Are you sure?");
+
+    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+        @Override
         public void onClick(DialogInterface dialog, int which) {
-            Toast.makeText(getApplicationContext(), "Pressed OK", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "OK Pressed", Toast.LENGTH_SHORT).show();
         }
     });
 
-    // Set Negative Button (e.g. Cancel)
-    myAlertBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-        public void onClick(DialogInterface dialog, int which) {
-            Toast.makeText(getApplicationContext(), "Pressed Cancel", Toast.LENGTH_SHORT).show();
-        }
-    });
+    builder.show();
 
-    // Create and display the dialog
-    myAlertBuilder.show();
 }
 ```
 
@@ -105,56 +101,50 @@ Pickers provide standardized, locale-sensitive controls for selecting dates and 
 ### A. Date Picker Implementation (`DatePickerFragment.java`)
 
 ```java
-package com.example.android.datetimepickers;
-
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.widget.DatePicker;
-import java.util.Calendar;
-
-public class DatePickerFragment extends DialogFragment 
+public class DatePickerFragment extends DialogFragment
         implements DatePickerDialog.OnDateSetListener {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        // Default to current date using Calendar
-        final Calendar c = Calendar.getInstance();
+
+        Calendar c = Calendar.getInstance();
+
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
 
-        // Return DatePickerDialog instance
         return new DatePickerDialog(getActivity(), this, year, month, day);
     }
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int day) {
-        // Pass result back to host MainActivity
-        MainActivity activity = (MainActivity) getActivity();
-        if (activity != null) {
-            activity.processDatePickerResult(year, month, day);
-        }
+
+        MainActivity activity = (MainActivity)getActivity();
+
+        activity.processDatePickerResult(year, month, day);
+
     }
+
 }
 ```
 
 #### Launching the DatePicker Fragment from `MainActivity.java`:
 
 ```java
-public void showDatePickerDialog(View v) {
-    DialogFragment newFragment = new DatePickerFragment();
-    newFragment.show(getSupportFragmentManager(), "datePicker");
+public void showDatePicker(View view){
+
+    DialogFragment picker = new DatePickerFragment();
+
+    picker.show(getSupportFragmentManager(), "datePicker");
+
 }
 
-public void processDatePickerResult(int year, int month, int day) {
-    // Note: Month is 0-indexed (January = 0)
-    String monthString = Integer.toString(month + 1);
-    String dayString = Integer.toString(day);
-    String yearString = Integer.toString(year);
-    String dateMessage = (monthString + "/" + dayString + "/" + yearString);
-    Toast.makeText(this, "Date: " + dateMessage, Toast.LENGTH_SHORT).show();
+public void processDatePickerResult(int year, int month, int day){
+    month = month + 1;
+    String date = day + "/" + month + "/" + year;
+
+    Toast.makeText(this, date, Toast.LENGTH_SHORT).show();
+
 }
 ```
 
@@ -165,6 +155,7 @@ public void processDatePickerResult(int year, int month, int day) {
 A **Touch Gesture** occurs when a user places one or more fingers on the touch screen and performs specific movement patterns (e.g., tap, double-tap, long press, fling/swipe, scroll).
 
 ### A. Anatomy of a Motion Event (`MotionEvent`)
+
 Touch interactions deliver `MotionEvent` objects to the Activity's `onTouchEvent(MotionEvent event)` callback.
 
 - **Action Codes**: State transitions:
@@ -182,24 +173,22 @@ Touch interactions deliver `MotionEvent` objects to the Activity's `onTouchEvent
 ```java
 @Override
 public boolean onTouchEvent(MotionEvent event) {
-    int action = MotionEventCompat.getActionMasked(event);
 
-    switch (action) {
-        case (MotionEvent.ACTION_DOWN):
-            Log.d("Gestures", "Touch ACTION_DOWN at X: " + event.getX());
-            return true;
-        case (MotionEvent.ACTION_MOVE):
-            Log.d("Gestures", "Touch ACTION_MOVE");
-            return true;
-        case (MotionEvent.ACTION_UP):
-            Log.d("Gestures", "Touch ACTION_UP");
-            return true;
-        case (MotionEvent.ACTION_CANCEL):
-            Log.d("Gestures", "Touch ACTION_CANCEL");
-            return true;
-        default:
-            return super.onTouchEvent(event);
+    switch(event.getAction()) {
+        case MotionEvent.ACTION_DOWN:
+            Toast.makeText(this, "DOWN", Toast.LENGTH_SHORT).show();
+            break;
+
+        case MotionEvent.ACTION_MOVE:
+            Toast.makeText(this, "MOVE", Toast.LENGTH_SHORT).show();
+            break;
+
+        case MotionEvent.ACTION_UP:
+            Toast.makeText(this, "UP", Toast.LENGTH_SHORT).show();
+            break;
     }
+
+    return true;
 }
 ```
 

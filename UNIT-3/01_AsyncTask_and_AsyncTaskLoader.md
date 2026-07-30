@@ -5,7 +5,9 @@
 ## 1. The Android Threading Model & ANR (Exam Core Question)
 
 ### A. The Main Thread (UI Thread)
-In Android, the system creates a single thread of execution for the application called the **Main Thread (UI Thread)**. 
+
+In Android, the system creates a single thread of execution for the application called the **Main Thread (UI Thread)**.
+
 - **Role of UI Thread**: Dispatches user interaction events to the appropriate UI widgets and renders visual frames (drawing the layout).
 - **The Single Thread Model Rules (Exam 4-Mark Rule)**:
   1. **Do NOT block the UI thread**: Never perform long-running tasks (network requests, database queries, bitmap decoding, file I/O) on the main thread.
@@ -43,7 +45,7 @@ public class MyAsyncTask extends AsyncTask<Params, Progress, Result> { ... }
 1. **`Params`**: Type of parameters sent to the task upon execution (`execute(Params...)`). Passed into `doInBackground()`.
 2. **`Progress`**: Type of progress units published during background computation. Passed into `onProgressUpdate()`.
 3. **`Result`**: Type of result returned by the background calculation. Passed into `onPostExecute()`.
-4. *Note*: To omit any parameter type, use the `Void` class type (e.g., `AsyncTask<Void, Void, String>`).
+4. _Note_: To omit any parameter type, use the `Void` class type (e.g., `AsyncTask<Void, Void, String>`).
 
 ---
 
@@ -63,80 +65,56 @@ public class MyAsyncTask extends AsyncTask<Params, Progress, Result> { ... }
    onPostExecute(Result)                        |  (4. Receives result & updates UI)
 ```
 
-| Method Name | Executing Thread | Purpose & Description | Can Access UI Views? |
-| :--- | :--- | :--- | :---: |
-| **`onPreExecute()`** | **Main (UI) Thread** | Invoked automatically before the background computation starts. Used to setup UI (e.g., show a `ProgressBar`). | **YES** |
-| **`doInBackground(Params...)`** | **Background Thread** | Performs the actual heavy calculation or network task. Receives `Params...` and returns `Result`. Invokes `publishProgress()` to trigger progress updates. | **NO** |
-| **`onProgressUpdate(Progress...)`**| **Main (UI) Thread** | Triggered on the main thread after `publishProgress()` is called inside `doInBackground()`. Used to update live UI progress. | **YES** |
-| **`onPostExecute(Result)`** | **Main (UI) Thread** | Executed on the main thread after `doInBackground()` finishes and returns a result. Receives the `Result` object to display final UI updates. | **YES** |
+| Method Name                         | Executing Thread      | Purpose & Description                                                                                                                                      | Can Access UI Views? |
+| :---------------------------------- | :-------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------: |
+| **`onPreExecute()`**                | **Main (UI) Thread**  | Invoked automatically before the background computation starts. Used to setup UI (e.g., show a `ProgressBar`).                                             |       **YES**        |
+| **`doInBackground(Params...)`**     | **Background Thread** | Performs the actual heavy calculation or network task. Receives `Params...` and returns `Result`. Invokes `publishProgress()` to trigger progress updates. |        **NO**        |
+| **`onProgressUpdate(Progress...)`** | **Main (UI) Thread**  | Triggered on the main thread after `publishProgress()` is called inside `doInBackground()`. Used to update live UI progress.                               |       **YES**        |
+| **`onPostExecute(Result)`**         | **Main (UI) Thread**  | Executed on the main thread after `doInBackground()` finishes and returns a result. Receives the `Result` object to display final UI updates.              |       **YES**        |
 
 ---
 
 ### C. Complete Executable Code Pattern: `AsyncTask`
 
 ```java
-public class DownloadImageTask extends AsyncTask<String, Integer, Bitmap> {
+public class MyTask extends AsyncTask<Void, Integer, String> {
 
-    private WeakReference<ImageView> imageViewReference;
-    private ProgressBar progressBar;
-
-    public DownloadImageTask(ImageView imageView, ProgressBar progressBar) {
-        // Use WeakReference to avoid memory leaks
-        this.imageViewReference = new WeakReference<>(imageView);
-        this.progressBar = progressBar;
-    }
-
-    // 1. Setup UI before task starts
     @Override
     protected void onPreExecute() {
-        super.onPreExecute();
-        if (progressBar != null) {
-            progressBar.setVisibility(View.VISIBLE);
-        }
+        System.out.println("Task Started");
     }
 
-    // 2. Heavy background execution (Runs on Worker Thread)
     @Override
-    protected Bitmap doInBackground(String... urls) {
-        String url = urls[0];
-        Bitmap bitmap = null;
-        try {
-            InputStream in = new java.net.URL(url).openStream();
-            bitmap = BitmapFactory.decodeStream(in);
-            
-            // Publish progress (optional)
-            publishProgress(100);
-        } catch (Exception e) {
-            e.printStackTrace();
+    protected String doInBackground(Void... params) {
+
+        for(int i = 0; i <= 100; i += 20) {
+
+            publishProgress(i);
+
+            try {
+                Thread.sleep(1000);
+            } catch (Exception e) { }
+
         }
-        return bitmap; // Sent to onPostExecute
+
+        return "Download Complete";
     }
 
-    // 3. Live progress update on UI thread
     @Override
     protected void onProgressUpdate(Integer... values) {
-        super.onProgressUpdate(values);
-        if (progressBar != null) {
-            progressBar.setProgress(values[0]);
-        }
+
+        System.out.println("Progress : " + values[0] + "%");
+
     }
 
-    // 4. Final result processing on UI thread
     @Override
-    protected void onPostExecute(Bitmap result) {
-        super.onPostExecute(result);
-        if (progressBar != null) {
-            progressBar.setVisibility(View.GONE);
-        }
-        ImageView imageView = imageViewReference.get();
-        if (imageView != null && result != null) {
-            imageView.setImageBitmap(result);
-        }
+    protected void onPostExecute(String result) {
+
+        System.out.println(result);
+
     }
 }
 
-// Execution call in Activity:
-// new DownloadImageTask(myImageView, myProgressBar).execute("https://example.com/image.png");
 ```
 
 ---
@@ -231,7 +209,7 @@ public class FetchBookLoader extends AsyncTaskLoader<String> {
 #### 2. Activity Implementation (`MainActivity.java`):
 
 ```java
-public class MainActivity extends AppCompatActivity 
+public class MainActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<String> {
 
     private static final int BOOK_LOADER_ID = 101;

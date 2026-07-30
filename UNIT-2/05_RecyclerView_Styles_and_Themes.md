@@ -38,11 +38,11 @@ RECYCLERVIEW WIDGET               LAYOUT MANAGER                       ADAPTER
 
 ### 2. Mandatory Adapter Callback Methods (Exam 6-Mark Question)
 
-| Adapter Callback | Trigger & Purpose | Return Value |
-| :--- | :--- | :--- |
-| **`onCreateViewHolder(ViewGroup parent, int viewType)`** | Called when `RecyclerView` needs a brand-new `ViewHolder` instance. Inflates the item layout XML using `LayoutInflater`. | Returns a new custom `ViewHolder` instance. |
-| **`onBindViewHolder(ViewHolder holder, int position)`** | Called by `RecyclerView` to populate/bind data at the specified dataset `position` into the cached views of `holder`. | `void` |
-| **`getItemCount()`** | Queries the size of the dataset. | Returns `int` total number of items in dataset. |
+| Adapter Callback                                         | Trigger & Purpose                                                                                                        | Return Value                                    |
+| :------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------- |
+| **`onCreateViewHolder(ViewGroup parent, int viewType)`** | Called when `RecyclerView` needs a brand-new `ViewHolder` instance. Inflates the item layout XML using `LayoutInflater`. | Returns a new custom `ViewHolder` instance.     |
+| **`onBindViewHolder(ViewHolder holder, int position)`**  | Called by `RecyclerView` to populate/bind data at the specified dataset `position` into the cached views of `holder`.    | `void`                                          |
+| **`getItemCount()`**                                     | Queries the size of the dataset.                                                                                         | Returns `int` total number of items in dataset. |
 
 ---
 
@@ -51,68 +51,46 @@ RECYCLERVIEW WIDGET               LAYOUT MANAGER                       ADAPTER
 #### A. Custom Adapter & ViewHolder (`WordListAdapter.java`):
 
 ```java
-package com.example.android.recyclerviewdemo;
-
-import android.content.Context;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import java.util.LinkedList;
-
 public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordViewHolder> {
 
-    private final LinkedList<String> mWordList;
-    private final LayoutInflater mInflater;
+    LinkedList<String> list;
+    LayoutInflater inflater;
 
-    // Constructor initializes dataset and layout inflater
-    public WordListAdapter(Context context, LinkedList<String> wordList) {
-        mInflater = LayoutInflater.from(context);
-        this.mWordList = wordList;
+    public WordListAdapter(Context context, LinkedList<String> list) {
+        this.list = list;
+        inflater = LayoutInflater.from(context);
     }
 
-    // 1. Inflate item layout XML and return new ViewHolder
     @Override
     public WordViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View mItemView = mInflater.inflate(R.layout.wordlist_item, parent, false);
-        return new WordViewHolder(mItemView, this);
+
+        View view = inflater.inflate(R.layout.wordlist_item, parent, false);
+        return new WordViewHolder(view);
     }
 
-    // 2. Bind dataset value at position to ViewHolder views
     @Override
     public void onBindViewHolder(WordViewHolder holder, int position) {
-        String mCurrent = mWordList.get(position);
-        holder.wordItemView.setText(mCurrent);
+        holder.textView.setText(list.get(position));
+
     }
 
-    // 3. Return total item count
     @Override
     public int getItemCount() {
-        return mWordList.size();
+        return list.size();
+
     }
 
-    // Custom ViewHolder class holding view references and handling click events
-    class WordViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public final TextView wordItemView;
-        final WordListAdapter mAdapter;
+    class WordViewHolder extends RecyclerView.ViewHolder {
 
-        public WordViewHolder(View itemView, WordListAdapter adapter) {
+        TextView textView;
+
+        public WordViewHolder(View itemView) {
             super(itemView);
-            wordItemView = (TextView) itemView.findViewById(R.id.word);
-            this.mAdapter = adapter;
-            itemView.setOnClickListener(this); // Register click listener on item view
-        }
-
-        @Override
-        public void onClick(View v) {
-            int mPosition = getLayoutPosition();
-            String element = mWordList.get(mPosition);
-            mWordList.set(mPosition, "Clicked! " + element);
-            mAdapter.notifyDataSetChanged(); // Notify adapter to re-render updated data
+            textView = itemView.findViewById(R.id.word);
         }
     }
 }
+
 ```
 
 #### B. Activity Setup (`MainActivity.java`):
@@ -120,29 +98,27 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.WordVi
 ```java
 public class MainActivity extends AppCompatActivity {
 
-    private final LinkedList<String> mWordList = new LinkedList<>();
-    private RecyclerView mRecyclerView;
-    private WordListAdapter mAdapter;
+    RecyclerView recyclerView;
+    WordListAdapter adapter;
+    LinkedList<String> list = new LinkedList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Populate mock dataset
-        for (int i = 0; i < 20; i++) {
-            mWordList.addLast("Word " + i);
-        }
+        // Add data
+        list.add("Apple");
+        list.add("Banana");
+        list.add("Orange");
 
-        // Get RecyclerView handle
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview);
+        recyclerView = findViewById(R.id.recyclerview);
 
-        // Instantiate custom Adapter
-        mAdapter = new WordListAdapter(this, mWordList);
+        adapter = new WordListAdapter(this, list);
 
-        // Connect Adapter and LayoutManager to RecyclerView
-        mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 }
 ```
@@ -154,9 +130,11 @@ public class MainActivity extends AppCompatActivity {
 ---
 
 ### 1. Drawables (`res/drawable`)
+
 A **Drawable** is a general abstraction for graphic assets that can be drawn to the screen (bitmaps, vector graphics, shape XMLs, layer lists, state lists).
 
 #### Types of Drawables:
+
 - **Bitmap Drawables**: PNG, JPEG, or WEBP image files.
 - **Vector Drawables (`<vector>`)**: XML files containing vector path definitions that scale dynamically across screen densities without quality loss or pixelation.
 - **Shape Drawables (`<shape>`)**: XML drawables defining geometric shapes (rectangles, ovals, rings), corner radii, solid fill colors (`<solid>`), and borders (`<stroke>`).
@@ -175,13 +153,14 @@ A **Drawable** is a general abstraction for graphic assets that can be drawn to 
 
 ### 2. Styles vs. Themes (Exam 6-Mark Distinction)
 
-| Dimension | Styles (`style`) | Themes (`android:theme`) |
-| :--- | :--- | :--- |
-| **Definition** | A collection of visual attributes applied to a **single specific View** in a layout. | A collection of visual attributes applied to an **entire Activity or Application**. |
-| **Scope** | Scope is localized to an individual widget (e.g. styling a single `Button` or `TextView`). | Scope is global across all View hierarchies inside the activity/application. |
-| **XML Syntax** | Specified using the `style="@style/MyStyle"` attribute on a View tag. | Specified using `android:theme="@style/AppTheme"` in `AndroidManifest.xml`. |
+| Dimension      | Styles (`style`)                                                                           | Themes (`android:theme`)                                                            |
+| :------------- | :----------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------- |
+| **Definition** | A collection of visual attributes applied to a **single specific View** in a layout.       | A collection of visual attributes applied to an **entire Activity or Application**. |
+| **Scope**      | Scope is localized to an individual widget (e.g. styling a single `Button` or `TextView`). | Scope is global across all View hierarchies inside the activity/application.        |
+| **XML Syntax** | Specified using the `style="@style/MyStyle"` attribute on a View tag.                      | Specified using `android:theme="@style/AppTheme"` in `AndroidManifest.xml`.         |
 
 #### A. Defining a Custom Style (`res/values/styles.xml`):
+
 ```xml
 <resources>
     <!-- Base Application Theme -->
@@ -202,6 +181,7 @@ A **Drawable** is a general abstraction for graphic assets that can be drawn to 
 ```
 
 #### B. Night Mode Support (`Theme.AppCompat.DayNight`):
+
 Inheriting from `Theme.AppCompat.DayNight` enables automatic switching between Light and Dark themes based on system time or device battery saver status.
 
 ---
